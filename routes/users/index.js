@@ -26,8 +26,15 @@ const router = express.Router();
 
 });
 
-router.post('/', (req, res) => {
-    res.send(req.method);
+//User Registration
+router.post('/', async (req, res) => {
+    try {
+        const user = new User(req.body);
+        await user.save();
+        res.send({ "status": "User Registered Succesfully" });
+    } catch (err) {
+        res.status(500).json({ "error": err });
+    }
 });
 
 router.put('/', (req, res) => {
