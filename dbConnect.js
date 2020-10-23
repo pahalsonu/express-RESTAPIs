@@ -9,7 +9,7 @@ const connectDB = async () => {
                 useUnifiedTopology: true,
                 useCreateIndex: true
             });
-        console.log("Mongo DB Connected.")
+        console.log("Mongo DB is Connected.")
     } catch (err) {
         console.log(err);
     }

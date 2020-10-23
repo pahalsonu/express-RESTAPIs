@@ -1,4 +1,5 @@
 const express = require("express");
+const { body, validationResult } = require('express-validator');
 //Import Models 
 const User = require('../../models/Users');
 
@@ -27,15 +28,31 @@ const router = express.Router();
 });
 
 //User Registration
-router.post('/', async (req, res) => {
+router.post('/', [
+    body('firstName', "FirstName is Required").notEmpty(),
+    body('firstName', "FirstName Type Should Be String").isString(),
+    body('lastName', "Last Name Should be String").isString(),
+    body("email", "Enter Valid Email Address").isEmail(),
+    body("password", "Minimum 6 Characters Required").isLength({ min: 6 }).custom((value, { req }) => {
+        if (value !== req.body.confirmPassword) {
+            throw new Error('Password confirmation does not match password');
+        }
+        return value;
+    })
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
-        const user = new User(req.body);
-        await user.save();
+        // const user = new User(req.body);
+        // await user.save();
         res.send({ "status": "User Registered Succesfully" });
     } catch (err) {
         res.status(500).json({ "error": err });
     }
 });
+
 
 //Edit Profile Route for User
 
