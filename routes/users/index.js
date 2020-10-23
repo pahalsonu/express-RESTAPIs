@@ -45,8 +45,8 @@ router.post('/', [
         return res.status(400).json({ errors: errors.array() });
     }
     try {
-        // const user = new User(req.body);
-        // await user.save();
+        const user = new User(req.body);
+        await user.save();
         res.send({ "status": "User Registered Succesfully" });
     } catch (err) {
         res.status(500).json({ "error": err });
